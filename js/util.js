@@ -48,8 +48,33 @@ const getArrayRandomLengthFromValues = (arr) => {
   return result.slice(0, randomLength);
 }
 
+/**
+ * Function for getting value from number
+ * @param  {number} number  Number
+ * @param  {array} words    Array value
+ * @returns {*}             Value of array
+ */
+const getValueFromNubmer = (number, words) => {
+  return words[(number % 100 > 4 && number % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? number % 10 : 5]];
+}
+
+/**
+ * @param  {object} elem Object
+ * @param  {array} arr   Array
+ * @returns  {boolean}   Boolean
+ */
+const getClassValue = (elem, arr) => {
+  const className = elem.className.split('--');
+  if (arr.includes(className[1])) {
+    return true;
+  }
+  return false;
+};
+
 export {
   getRandomNumberRangeInclusive,
   getRandomElementFromArray,
-  getArrayRandomLengthFromValues
+  getArrayRandomLengthFromValues,
+  getValueFromNubmer,
+  getClassValue
 };
