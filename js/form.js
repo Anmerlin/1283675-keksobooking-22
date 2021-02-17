@@ -11,19 +11,25 @@ const pricePerNight = document.querySelector('#price');
 const timeCheckIn = document.querySelector('#timein');
 const timeCheckOut = document.querySelector('#timeout');
 
-// «Тип жилья» — выбор опции меняет атрибуты минимального значения и плейсхолдера поля «Цена за ночь»;
-typeHousing.addEventListener('change', (evt) => {
-  let val = evt.target.value;
-  pricePerNight.min = pricePerNight.placeholder = minPriceHousePerNight[val];
-});
+const initForm = () => {
+  // «Тип жилья» — выбор опции меняет атрибуты минимального значения и плейсхолдера поля «Цена за ночь»;
+  typeHousing.addEventListener('change', (evt) => {
+    let val = evt.target.value;
+    pricePerNight.min = pricePerNight.placeholder = minPriceHousePerNight[val];
+  });
 
-// «Время заезда», «Время выезда» — выбор опции одного поля автоматически изменят значение другого.
-timeCheckIn.addEventListener('change', (evt) => {
-  let val = evt.target.value;
-  timeCheckOut.value = val;
-});
+  // «Время заезда», «Время выезда» — выбор опции одного поля автоматически изменят значение другого.
+  timeCheckIn.addEventListener('change', (evt) => {
+    let val = evt.target.value;
+    timeCheckOut.value = val;
+  });
 
-timeCheckOut.addEventListener('change', (evt) => {
-  let val = evt.target.value;
-  timeCheckIn.value = val;
-});
+  timeCheckOut.addEventListener('change', (evt) => {
+    let val = evt.target.value;
+    timeCheckIn.value = val;
+  });
+};
+
+export {
+  initForm
+};

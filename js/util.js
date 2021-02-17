@@ -64,7 +64,7 @@ const getValueFromNubmer = (number, words) => {
  * @param  {array} arr   Array - for checking
  * @returns  {boolean}   Boolean
  */
-const checkClassValueInArray = (elem, arr) => {
+const hasClassValueInArray = (elem, arr) => {
   const className = elem.className.split('--');
   if (arr.includes(className[1])) {
     return true;
@@ -77,5 +77,5 @@ export {
   getRandomElementFromArray,
   getArrayRandomLengthFromValues,
   getValueFromNubmer,
-  checkClassValueInArray
+  hasClassValueInArray
 };

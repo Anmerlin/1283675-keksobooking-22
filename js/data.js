@@ -75,12 +75,12 @@ const createAnnouncement = () => {
 };
 
 
-//const similarAnnouncements = new Array(SIMILAR_ANNOUNCEMENTS_COUNT).fill(null).map(() => createaAnnouncement());
+//const createDataArraySimilarAnnouncements = new Array(SIMILAR_ANNOUNCEMENTS_COUNT).fill(null).map(() => createaAnnouncement());
 /**
  * @param  {number} count
  * @return  {Array} {announcements[i]=createAnnouncement(
  */
-const similarAnnouncements = (count) => {
+const createDataArraySimilarAnnouncements = (count) => {
   let announcements = [];
   for (let i = 0; i < count; i++) {
     announcements[i] = createAnnouncement();
@@ -89,5 +89,5 @@ const similarAnnouncements = (count) => {
 }
 
 export {
-  similarAnnouncements
+  createDataArraySimilarAnnouncements
 };
