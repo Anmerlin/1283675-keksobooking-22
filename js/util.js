@@ -59,11 +59,12 @@ const getValueFromNubmer = (number, words) => {
 }
 
 /**
- * @param  {object} elem Object
- * @param  {array} arr   Array
+ * Function for checking the existence of a class value in an array
+ * @param  {object} elem Object - value of class
+ * @param  {array} arr   Array - for checking
  * @returns  {boolean}   Boolean
  */
-const getClassValue = (elem, arr) => {
+const hasClassValueInArray = (elem, arr) => {
   const className = elem.className.split('--');
   if (arr.includes(className[1])) {
     return true;
@@ -76,5 +77,5 @@ export {
   getRandomElementFromArray,
   getArrayRandomLengthFromValues,
   getValueFromNubmer,
-  getClassValue
+  hasClassValueInArray
 };
