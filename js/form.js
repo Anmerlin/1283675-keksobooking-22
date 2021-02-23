@@ -5,13 +5,54 @@ let minPriceHousePerNight = {
   palace: 10000,
 };
 
+const adForm = document.querySelector('.ad-form');
+const mapFilters = document.querySelector('.map__filters');
+
 const typeHousing = document.querySelector('#type');
 const pricePerNight = document.querySelector('#price');
 
 const timeCheckIn = document.querySelector('#timein');
 const timeCheckOut = document.querySelector('#timeout');
 
+/**
+ * Form state change function
+ */
+const changeStateForm = () => {
+  adForm.classList.toggle('ad-form--disabled');
+  mapFilters.classList.toggle('map__filters--disabled');
+};
+
+/**
+ * Function for changing the state of interactive form elements
+ * @param  {object} formName constants defining the form
+ */
+const changeStateFormControls = (formName) => {
+  const formElements = formName.elements;
+  for (const element of formElements) {
+    if (element.hasAttribute('disabled')) {
+      element.removeAttribute('disabled');
+    } else {
+      element.setAttribute('disabled', 'disabled')
+    }
+  }
+};
+
+/**
+ * Function for changing the states of forms and interactive elements
+ */
+const setActiveForm = () => {
+  changeStateForm();
+  changeStateFormControls(adForm);
+  changeStateFormControls(mapFilters);
+};
+
+/**
+ * Form initialization function
+ */
 const initForm = () => {
+  // Реализуйте с помощью JavaScript перевод страницы в неактивное состояние, все пункты, кроме первого про карту.
+  setActiveForm();
+
   // «Тип жилья» — выбор опции меняет атрибуты минимального значения и плейсхолдера поля «Цена за ночь»;
   typeHousing.addEventListener('change', (evt) => {
     let val = evt.target.value;
@@ -30,6 +71,4 @@ const initForm = () => {
   });
 };
 
-export {
-  initForm
-};
+export {initForm, setActiveForm};
