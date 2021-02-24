@@ -16,10 +16,16 @@ const timeCheckOut = document.querySelector('#timeout');
 
 /**
  * Form state change function
+ * @param  {boolean} flag true - active, false - diasbled
  */
-const changeStateForm = () => {
-  adForm.classList.toggle('ad-form--disabled');
-  mapFilters.classList.toggle('map__filters--disabled');
+const changeStateForm = (flag) => {
+  if (flag) {
+    adForm.classList.remove('ad-form--disabled');
+    mapFilters.classList.remove('map__filters--disabled');
+  } else {
+    adForm.classList.add('ad-form--disabled');
+    mapFilters.classList.add('map__filters--disabled');
+  }
 };
 
 /**
@@ -39,9 +45,10 @@ const changeStateFormControls = (formName) => {
 
 /**
  * Function for changing the states of forms and interactive elements
+ * @param  {boolean} flag true - active form, false - diasbled form
  */
-const setActiveForm = () => {
-  changeStateForm();
+const setStatusForm = (flag) => {
+  changeStateForm(flag);
   changeStateFormControls(adForm);
   changeStateFormControls(mapFilters);
 };
@@ -51,7 +58,7 @@ const setActiveForm = () => {
  */
 const initForm = () => {
   // Реализуйте с помощью JavaScript перевод страницы в неактивное состояние, все пункты, кроме первого про карту.
-  setActiveForm();
+  setStatusForm(false);
 
   // «Тип жилья» — выбор опции меняет атрибуты минимального значения и плейсхолдера поля «Цена за ночь»;
   typeHousing.addEventListener('change', (evt) => {
@@ -71,4 +78,4 @@ const initForm = () => {
   });
 };
 
-export {initForm, setActiveForm};
+export {initForm, setStatusForm};
