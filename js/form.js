@@ -4,12 +4,19 @@ const MAX_PRICE_HOUSING = 1000000;
 
 import {validateAnnouncementTitle, validatePrice, validateSeats} from './validation.js';
 
-let minPriceHousePerNight = {
+const minPriceHousePerNight = {
   bungalow: 0,
   flat: 1000,
   house: 5000,
   palace: 10000,
 };
+
+const roomsForGuests = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
+}
 
 const adForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
@@ -91,27 +98,26 @@ const initForm = () => {
   numberRooms.addEventListener('change', (evt) => {
     const currentVal = evt.target.value;
     const descendants = numberSeats.children;
+    const capacitySeat = roomsForGuests[currentVal];
+    const maxCapacitySeats = Math.max(...capacitySeat);
 
     if (numberSeats.hasAttribute('style')) {
       numberSeats.removeAttribute('style');
+      numberSeats.setCustomValidity('')
     }
 
-    if (currentVal == 100) {
-      for (let i = 0; i < descendants.length; i++) {
-        descendants[i].disabled = true;
-      }
-      descendants[descendants.length - 1].disabled = false;
-      descendants[descendants.length - 1].selected = true;
-    } else {
-      for (let i = 0; i < descendants.length - 1; i++) {
-        if (descendants[i].value <= currentVal) {
-          descendants[i].disabled = false;
-        } else {
-          descendants[i].disabled = true;
+    for (let descendant of descendants) {
+      const val = Number(descendant.value);
+
+      if (capacitySeat.includes(val)) {
+        descendant.disabled = false;
+
+        if (val === maxCapacitySeats) {
+          descendant.selected = true;
         }
+      } else {
+        descendant.disabled = true
       }
-      descendants[descendants.length - 1].disabled = true;
-      descendants[descendants[currentVal].value].selected = true;
     }
   });
 };
