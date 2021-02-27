@@ -1,3 +1,9 @@
+const MIN_ANNOUNCEMENT_TITLE_LENGTH = 30;
+const MAX_ANNOUNCEMENT_TITLE_LENGTH = 100;
+const MAX_PRICE_HOUSING = 1000000;
+
+import {validateAnnouncementTitle, validatePrice, validateSeats} from './validation.js';
+
 let minPriceHousePerNight = {
   bungalow: 0,
   flat: 1000,
@@ -8,18 +14,28 @@ let minPriceHousePerNight = {
 const adForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
 
+const announcementTitle = document.querySelector('#title');
 const typeHousing = document.querySelector('#type');
 const pricePerNight = document.querySelector('#price');
 
 const timeCheckIn = document.querySelector('#timein');
 const timeCheckOut = document.querySelector('#timeout');
 
+const numberRooms = document.querySelector('#room_number');
+const numberSeats = document.querySelector('#capacity');
+
 /**
  * Form state change function
+ * @param  {boolean} flag true - active, false - diasbled
  */
-const changeStateForm = () => {
-  adForm.classList.toggle('ad-form--disabled');
-  mapFilters.classList.toggle('map__filters--disabled');
+const changeStateForm = (flag) => {
+  if (flag) {
+    adForm.classList.remove('ad-form--disabled');
+    mapFilters.classList.remove('map__filters--disabled');
+  } else {
+    adForm.classList.add('ad-form--disabled');
+    mapFilters.classList.add('map__filters--disabled');
+  }
 };
 
 /**
@@ -39,9 +55,10 @@ const changeStateFormControls = (formName) => {
 
 /**
  * Function for changing the states of forms and interactive elements
+ * @param  {boolean} flag true - active form, false - diasbled form
  */
-const setActiveForm = () => {
-  changeStateForm();
+const setStatusForm = (flag) => {
+  changeStateForm(flag);
   changeStateFormControls(adForm);
   changeStateFormControls(mapFilters);
 };
@@ -51,7 +68,7 @@ const setActiveForm = () => {
  */
 const initForm = () => {
   // Реализуйте с помощью JavaScript перевод страницы в неактивное состояние, все пункты, кроме первого про карту.
-  setActiveForm();
+  setStatusForm(false);
 
   // «Тип жилья» — выбор опции меняет атрибуты минимального значения и плейсхолдера поля «Цена за ночь»;
   typeHousing.addEventListener('change', (evt) => {
@@ -69,6 +86,39 @@ const initForm = () => {
     let val = evt.target.value;
     timeCheckIn.value = val;
   });
+
+  //Поле «Количество комнат» синхронизировано с полем «Количество мест» таким образом, что при выборе количества комнат вводятся ограничения на допустимые варианты выбора количества гостей
+  numberRooms.addEventListener('change', (evt) => {
+    const currentVal = evt.target.value;
+    const descendants = numberSeats.children;
+
+    if (numberSeats.hasAttribute('style')) {
+      numberSeats.removeAttribute('style');
+    }
+
+    if (currentVal == 100) {
+      for (let i = 0; i < descendants.length; i++) {
+        descendants[i].disabled = true;
+      }
+      descendants[descendants.length - 1].disabled = false;
+      descendants[descendants.length - 1].selected = true;
+    } else {
+      for (let i = 0; i < descendants.length - 1; i++) {
+        if (descendants[i].value <= currentVal) {
+          descendants[i].disabled = false;
+        } else {
+          descendants[i].disabled = true;
+        }
+      }
+      descendants[descendants.length - 1].disabled = true;
+      descendants[descendants[currentVal].value].selected = true;
+    }
+  });
 };
 
-export {initForm, setActiveForm};
+// Validate form
+validateAnnouncementTitle(announcementTitle, MIN_ANNOUNCEMENT_TITLE_LENGTH, MAX_ANNOUNCEMENT_TITLE_LENGTH);
+validatePrice(pricePerNight, typeHousing, minPriceHousePerNight, MAX_PRICE_HOUSING);
+validateSeats(numberSeats, numberRooms);
+
+export {initForm, setStatusForm};

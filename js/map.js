@@ -2,19 +2,23 @@
 
 const LAT_COORD_DEFAULT = 35.68950;
 const LNG_COORD_DEFAULT = 139.69171;
+const NUMBER_DECIMAL_PLACES = 5;
 
-import {setActiveForm} from './form.js';
+import {setStatusForm} from './form.js';
 import {createBalloonPopupOnMap} from './card.js';
 
 const addressFieldForm = document.querySelector('#address');
 addressFieldForm.value = `${LAT_COORD_DEFAULT}, ${LNG_COORD_DEFAULT}`;
+addressFieldForm.setAttribute('readonly', true);
 
 const map = L.map('map-canvas')
   .on('load', () => {
     /* С помощью полученных обновлений (стили, изображения и скрипты необходимые для Leaflet) от Кексобота
     реализуйте отображение карты и дальнейший переход страницы в активное состояние.
     Координаты центра Токио найдите самостоятельно. */
-    setActiveForm();
+    setTimeout(() => {
+      setStatusForm(true);
+    }, 100)
   })
   .setView({
     lat: LAT_COORD_DEFAULT,
@@ -56,7 +60,7 @@ mainPinMarker.addTo(map);
  */
 mainPinMarker.on('moveend', (evt) => {
   let coords = evt.target.getLatLng();
-  addressFieldForm.value = `${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}`;
+  addressFieldForm.value = `${coords.lat.toFixed(NUMBER_DECIMAL_PLACES)}, ${coords.lng.toFixed(NUMBER_DECIMAL_PLACES)}`;
 });
 
 /**
