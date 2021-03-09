@@ -1,3 +1,5 @@
+const ERROR_SHOW_TIME = 5000;
+
 /**
  * Universal function that returns a random integer or floating point number from the passed range inclusive
  * @param  {number} fromValue         Value "from"
@@ -72,10 +74,59 @@ const hasClassValueInArray = (elem, arr) => {
   return false;
 };
 
+/**
+ * Function to display an error message when loading announcements data
+ * @param {string} err  Error type string
+ */
+const onErrorGetData = (err) => {
+  const mapContainer = document.querySelector('.map');
+  const errorBlock = document.createElement('div');
+
+  errorBlock.style.zIndex = 1000;
+  errorBlock.style.position = 'absolute';
+  errorBlock.style.left = 0;
+  errorBlock.style.bottom = '50px';
+  errorBlock.style.right = 0;
+  errorBlock.style.padding = '10px 5px';
+  errorBlock.style.fontSize = '16px';
+  errorBlock.style.textAlign = 'center';
+  errorBlock.style.color = 'white';
+  errorBlock.style.backgroundColor = 'red';
+
+  errorBlock.textContent = err;
+
+  mapContainer.append(errorBlock);
+
+  setTimeout(() => {
+    errorBlock.remove();
+  }, ERROR_SHOW_TIME);
+};
+
+/**
+ * Function for testing keystrokes "Esc"
+ * @param  {object} evt Data object on event
+ * @return  {boolean}   Which key was pressed
+ */
+const isEscEvent = (evt) => {
+  return evt.key === ('Escape' || 'Esc');
+};
+
+/**
+ * Function for testing keystrokes "nter"
+ * @param  {object} evt Data object on event
+ * @return {boolean}    Which key was pressed
+ */
+const isEnterEvent = (evt) => {
+  return evt.key === 'Enter';
+};
+
 export {
   getRandomNumberRangeInclusive,
   getRandomElementFromArray,
   getArrayRandomLengthFromValues,
   getValueFromNubmer,
-  hasClassValueInArray
+  hasClassValueInArray,
+  onErrorGetData,
+  isEscEvent,
+  isEnterEvent
 };

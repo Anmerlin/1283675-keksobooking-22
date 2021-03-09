@@ -3,6 +3,8 @@ const MAX_ANNOUNCEMENT_TITLE_LENGTH = 100;
 const MAX_PRICE_HOUSING = 1000000;
 
 import {validateAnnouncementTitle, validatePrice, validateSeats} from './validation.js';
+import {sendDataFormAnnouncement} from './requests.js';
+import {resetDataMap} from './map.js';
 
 const minPriceHousePerNight = {
   bungalow: 0,
@@ -30,6 +32,8 @@ const timeCheckOut = document.querySelector('#timeout');
 
 const numberRooms = document.querySelector('#room_number');
 const numberSeats = document.querySelector('#capacity');
+
+const resetFormButton = document.querySelector('.ad-form__reset');
 
 /**
  * Form state change function
@@ -69,6 +73,19 @@ const setStatusForm = (flag) => {
   changeStateFormControls(adForm);
   changeStateFormControls(mapFilters);
 };
+
+/**
+ * Function of clearing the state of the form and map
+ * @param  {function} data Function for setting markers on the map
+ */
+const clearForms = (data) => {
+  adForm.reset();
+  mapFilters.reset();
+  setTimeout(() => {
+    resetDataMap(data);
+  }, 100);
+};
+
 
 /**
  * Form initialization function
@@ -127,4 +144,25 @@ validateAnnouncementTitle(announcementTitle, MIN_ANNOUNCEMENT_TITLE_LENGTH, MAX_
 validatePrice(pricePerNight, typeHousing, minPriceHousePerNight, MAX_PRICE_HOUSING);
 validateSeats(numberSeats, numberRooms);
 
-export {initForm, setStatusForm};
+/**
+ * Function for setting actions with a form
+ * @param  {function} popup Function to show a message when submitting a form
+ * @param  {function} data  Function for setting markers on the map
+ */
+const setActionForm = (popup, data) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendDataFormAnnouncement(
+      () => popup(true, data),
+      () => popup(false),
+      new FormData(evt.target),
+    );
+  });
+
+  resetFormButton.addEventListener('click', () => {
+    clearForms(data);
+  })
+};
+
+export {initForm, setStatusForm, setActionForm, clearForms};
