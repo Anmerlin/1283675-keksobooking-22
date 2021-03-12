@@ -1,3 +1,6 @@
+
+const errShowSeatsForGuests = ['Значение количества комнат должно быть: 100 комнат'];
+
 /**
  * Function for setting the style of an invalid form field
  * @param  {object} elem  checked field
@@ -73,10 +76,10 @@ const validateSeats = (elem, numberRooms) => {
 
   if (currentValue == 0 && valueRoom != 100) {
     setInvalidStyle(elem);
-    elem.setCustomValidity('Значение количества комнат должно быть: 100 комнат');
+    elem.setCustomValidity(errShowSeatsForGuests[currentValue]);
   } else if (currentValue > valueRoom) {
     setInvalidStyle(elem);
-    elem.setCustomValidity('Значение количества комнат должно быть: ' + valueRoom + ' комната(ы)' + ((valueRoom > 1) ? ' и меньше' : ''));
+    elem.setCustomValidity(`Значение количества комнат должно быть: ${currentValue} комната(ы)`);
   } else {
     elem.style = '';
     elem.setCustomValidity('');

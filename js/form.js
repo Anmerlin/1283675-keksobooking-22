@@ -3,13 +3,22 @@ const MAX_ANNOUNCEMENT_TITLE_LENGTH = 100;
 const MAX_PRICE_HOUSING = 1000000;
 
 import {validateAnnouncementTitle, validatePrice, validateSeats} from './validation.js';
+import {sendDataFormAnnouncement} from './requests.js';
+import {resetDataMap} from './map.js';
 
-let minPriceHousePerNight = {
+const minPriceHousePerNight = {
   bungalow: 0,
   flat: 1000,
   house: 5000,
   palace: 10000,
 };
+
+const roomsForGuests = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
+}
 
 const adForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
@@ -23,6 +32,8 @@ const timeCheckOut = document.querySelector('#timeout');
 
 const numberRooms = document.querySelector('#room_number');
 const numberSeats = document.querySelector('#capacity');
+
+const resetFormButton = document.querySelector('.ad-form__reset');
 
 /**
  * Form state change function
@@ -64,6 +75,19 @@ const setStatusForm = (flag) => {
 };
 
 /**
+ * Function of clearing the state of the form and map
+ * @param  {function} data Function for setting markers on the map
+ */
+const clearForms = (data) => {
+  adForm.reset();
+  mapFilters.reset();
+  setTimeout(() => {
+    resetDataMap(data);
+  }, 100);
+};
+
+
+/**
  * Form initialization function
  */
 const initForm = () => {
@@ -91,27 +115,26 @@ const initForm = () => {
   numberRooms.addEventListener('change', (evt) => {
     const currentVal = evt.target.value;
     const descendants = numberSeats.children;
+    const capacitySeat = roomsForGuests[currentVal];
+    const maxCapacitySeats = Math.max(...capacitySeat);
 
     if (numberSeats.hasAttribute('style')) {
       numberSeats.removeAttribute('style');
+      numberSeats.setCustomValidity('')
     }
 
-    if (currentVal == 100) {
-      for (let i = 0; i < descendants.length; i++) {
-        descendants[i].disabled = true;
-      }
-      descendants[descendants.length - 1].disabled = false;
-      descendants[descendants.length - 1].selected = true;
-    } else {
-      for (let i = 0; i < descendants.length - 1; i++) {
-        if (descendants[i].value <= currentVal) {
-          descendants[i].disabled = false;
-        } else {
-          descendants[i].disabled = true;
+    for (let descendant of descendants) {
+      const val = Number(descendant.value);
+
+      if (capacitySeat.includes(val)) {
+        descendant.disabled = false;
+
+        if (val === maxCapacitySeats) {
+          descendant.selected = true;
         }
+      } else {
+        descendant.disabled = true
       }
-      descendants[descendants.length - 1].disabled = true;
-      descendants[descendants[currentVal].value].selected = true;
     }
   });
 };
@@ -121,4 +144,25 @@ validateAnnouncementTitle(announcementTitle, MIN_ANNOUNCEMENT_TITLE_LENGTH, MAX_
 validatePrice(pricePerNight, typeHousing, minPriceHousePerNight, MAX_PRICE_HOUSING);
 validateSeats(numberSeats, numberRooms);
 
-export {initForm, setStatusForm};
+/**
+ * Function for setting actions with a form
+ * @param  {function} popup Function to show a message when submitting a form
+ * @param  {function} data  Function for setting markers on the map
+ */
+const setActionForm = (popup, data) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendDataFormAnnouncement(
+      () => popup(true, data),
+      () => popup(false),
+      new FormData(evt.target),
+    );
+  });
+
+  resetFormButton.addEventListener('click', () => {
+    clearForms(data);
+  })
+};
+
+export {initForm, setStatusForm, setActionForm, clearForms};

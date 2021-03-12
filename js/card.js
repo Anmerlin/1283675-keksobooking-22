@@ -70,6 +70,9 @@ const createBalloonPopupOnMap = (dataCard) => {
   createImagesCardFromArray(photo, photosContainer, dataOffer.photos); // В блок .popup__photos выведите все фотографии из списка offer.photos. Каждая из строк массива photos должна записываться как src соответствующего изображения.
   cardElement.querySelector('.popup__avatar').src = dataAuthor.avatar; // Замените src у аватарки пользователя — изображения, которое записано в .popup__avatar — на значения поля author.avatar отрисовываемого объекта.
 
+  if (!dataOffer.features.length) featuresContainer.classList.add('hidden');
+  if (!dataOffer.photos.length) photosContainer.classList.add('hidden');
+
   return cardElement;
 };
 
