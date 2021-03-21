@@ -83,9 +83,9 @@ const checkAnnouncementsFeatures = (announcements) => {
   return [...featuresCheckbox].every((item) => {
     if (item.checked) {
       return announcements.offer.features.indexOf(item.value) !== -1;
-    } else {
-      return true;
     }
+
+    return true;
   });
 };
 

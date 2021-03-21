@@ -1,7 +1,9 @@
+const DEFAULT_IMAGE = 'img/muffin-grey.svg';
 const MIN_ANNOUNCEMENT_TITLE_LENGTH = 30;
 const MAX_ANNOUNCEMENT_TITLE_LENGTH = 100;
 const MAX_PRICE_HOUSING = 1000000;
 
+import {setDefaultPhoto, changePhotoHandler} from './photo.js';
 import {validateAnnouncementTitle, validatePrice, validateSeats} from './validation.js';
 import {sendDataFormAnnouncement} from './requests.js';
 import {resetDataMap} from './map.js';
@@ -23,6 +25,11 @@ const roomsForGuests = {
 
 const adForm = document.querySelector('.ad-form');
 const adFormReset = document.querySelector('.ad-form__reset');
+
+const fileSelectionUser = document.querySelector('.ad-form__field input[type=file]');
+const fileSelectionHousing = document.querySelector('.ad-form__upload input[type=file]');
+const userPhotoPreview = document.querySelector('.ad-form-header__preview');
+const housingPhotoPreview = document.querySelector('.ad-form__photo');
 
 const announcementTitle = document.querySelector('#title');
 const typeHousing = document.querySelector('#type');
@@ -79,6 +86,8 @@ const setStatusForm = (flag) => {
  */
 const clearForms = (data) => {
   adForm.reset();
+  setDefaultPhoto(fileSelectionUser, userPhotoPreview, true, DEFAULT_IMAGE);
+  setDefaultPhoto(fileSelectionHousing, housingPhotoPreview);
   resetFormFilters();
   resetDataMap(data);
 };
@@ -133,6 +142,9 @@ const initForm = () => {
       }
     }
   });
+
+  changePhotoHandler(fileSelectionUser, userPhotoPreview);
+  changePhotoHandler(fileSelectionHousing, housingPhotoPreview);
 };
 
 // Validate form
