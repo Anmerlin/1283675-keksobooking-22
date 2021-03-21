@@ -74,7 +74,7 @@ const validateSeats = (elem, numberRooms) => {
   const currentValue = elem.value;
   const valueRoom = numberRooms.value;
 
-  if (currentValue == 0 && valueRoom != 100) {
+  if (currentValue === 0 && valueRoom !== 100) {
     setInvalidStyle(elem);
     elem.setCustomValidity(errShowSeatsForGuests[currentValue]);
   } else if (currentValue > valueRoom) {

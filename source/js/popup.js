@@ -11,10 +11,11 @@ const main = document.querySelector('main');
  */
 const onPopupHide = (evt) => {
   const popup = main.querySelector('.success') || main.querySelector('.error');
-  if (isEscEvent(evt) || isEnterEvent(evt) || evt.type == 'click') {
+  if (isEscEvent(evt) || isEnterEvent(evt) || evt.type === 'click') {
     evt.preventDefault();
     popup.remove();
   }
+  document.removeEventListener('keydown', onPopupHide);
 };
 
 /**
