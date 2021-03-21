@@ -4,7 +4,7 @@ const ERROR_SHOW_TIME = 5000;
  * Universal function that returns a random integer or floating point number from the passed range inclusive
  * @param  {number} fromValue         Value "from"
  * @param  {number} toValue           Value "to"
- * @param  {number} numberSimbols=0   A number of simbols after comma
+ * @param  {number} numberSimbols     A number of simbols after comma
  * @returns {number}                  Number from range
  */
 const getRandomNumberRangeInclusive = (fromValue, toValue, numberSimbols = 0) => {
@@ -112,12 +112,27 @@ const isEscEvent = (evt) => {
 };
 
 /**
- * Function for testing keystrokes "nter"
+ * Function for testing keystrokes "Enter"
  * @param  {object} evt Data object on event
  * @return {boolean}    Which key was pressed
  */
 const isEnterEvent = (evt) => {
   return evt.key === 'Enter';
+};
+
+/**
+ * Debouncing function
+ * @param  {function} fn  calback function
+ * @param  {number} ms    delay time
+ */
+const debounceHandler = (fn, ms) => {
+  let timeout;
+
+  return () => {
+    clearTimeout(timeout);
+
+    timeout = setTimeout(fn, ms);
+  };
 };
 
 export {
@@ -128,5 +143,6 @@ export {
   hasClassValueInArray,
   onErrorGetData,
   isEscEvent,
-  isEnterEvent
+  isEnterEvent,
+  debounceHandler
 };
