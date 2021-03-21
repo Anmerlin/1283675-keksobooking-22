@@ -4,14 +4,15 @@ const LAT_COORD_DEFAULT = 35.68950;
 const LNG_COORD_DEFAULT = 139.69171;
 const NUMBER_DECIMAL_PLACES = 5;
 const NUMBER_ZOOM_MAP = 9;
+const RERENDER_DELAY = 500;
 
 import {setStatusForm} from './form.js';
 import {createBalloonPopupOnMap} from './card.js';
+import {setHandlerFormFilter, getFilteredAnnouncements} from './filter.js';
+import {debounceHandler} from './util.js';
 
 const addressFieldForm = document.querySelector('#address');
 const addressFieldFormValue = () => {
-  // addressFieldForm.value = `${LAT_COORD_DEFAULT}, ${LNG_COORD_DEFAULT}`;
-  // console.log (addressFieldForm.value);
   return addressFieldForm.value = `${LAT_COORD_DEFAULT}, ${LNG_COORD_DEFAULT}`;
 }
 
@@ -75,7 +76,12 @@ mainPinMarker.on('moveend', (evt) => {
  * Function of adding a marker to the map
  * @param  {array} points  An array of objects to display the marker and balloon
  */
-const addMarkersOnMap = (points) => {
+const addMarkersOnMap = (points, isClear = false) => {
+  if (isClear) {
+    map.setView(latlng, NUMBER_ZOOM_MAP);
+    layerPins.clearLayers();
+  }
+
   points.forEach(({author, offer, location}) => {
     const marker = L.marker({
       lat: location.lat,
@@ -93,16 +99,27 @@ const addMarkersOnMap = (points) => {
 
   layerPins.addTo(map);
 };
+
 /**
  * Function to reset the card to default state
  * @param  {function} showPins  Function for setting markers on the map
  */
 const resetDataMap = (showPins) => {
-  addressFieldFormValue();
   map.setView(latlng, NUMBER_ZOOM_MAP);
   mainPinMarker.setLatLng(latlng);
   layerPins.remove();
   showPins();
+  addressFieldFormValue();
 }
 
-export {addMarkersOnMap, resetDataMap};
+const showFilteredAnnouncements = (data, count) => {
+  if (data && data.length) {
+    setHandlerFormFilter(
+      debounceHandler(() => {
+        addMarkersOnMap(getFilteredAnnouncements(data, count), true);
+      }, RERENDER_DELAY),
+    );
+  }
+}
+
+export {addMarkersOnMap, resetDataMap, showFilteredAnnouncements};
