@@ -1,4 +1,5 @@
-import {onErrorGetData} from './util.js';
+import {setStatusFormFilters} from './filter.js';
+import {showErrorGetData} from './util.js';
 
 const URL_GET_DATA = 'https://22.javascript.pages.academy/keksobooking/data';
 const URL_SEND_DATA = 'https://22.javascript.pages.academy/keksobooking';
@@ -17,9 +18,11 @@ const getDataAnnouncements = (onSuccess) => {
     })
     .then((points) => {
       onSuccess(points);
+      setStatusFormFilters(true);
     })
     .catch((err) => {
-      onErrorGetData(`Ошибка загрузки данных объявлений на карту (${err}). Вы можете продолжать работу`);
+      setStatusFormFilters(false);
+      showErrorGetData(`Ошибка загрузки данных объявлений на карту (${err}). Вы можете продолжать работу`);
     });
 };
 

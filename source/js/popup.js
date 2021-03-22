@@ -26,6 +26,7 @@ const onPopupHide = (evt) => {
 const showMessagePopup = (status, data) => {
   if (status) {
     const messageSuccess = successMessageTemplate.cloneNode(true);
+    messageSuccess.style.zIndex = 1000;
     main.append(messageSuccess);
     clearForms(data);
     document.addEventListener('keydown', onPopupHide);
@@ -33,8 +34,9 @@ const showMessagePopup = (status, data) => {
   } else {
     const messageError = errorMessageTemplate.cloneNode(true);
     const errorBtn = messageError.querySelector('.error__button');
-    errorBtn.focus();
+    messageError.style.zIndex = 1000;
     main.append(messageError);
+    errorBtn.focus();
     document.addEventListener('keydown', onPopupHide);
     errorBtn.addEventListener('keydown', onPopupHide);
     messageError.addEventListener('click', onPopupHide);

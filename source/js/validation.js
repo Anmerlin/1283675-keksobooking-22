@@ -1,4 +1,3 @@
-
 const errShowSeatsForGuests = ['Значение количества комнат должно быть: 100 комнат'];
 
 /**
@@ -45,8 +44,8 @@ const validateAnnouncementTitle = (elem, minLength, maxLenght) => {
  */
 const validatePrice = (elem, typeHousing, minPricesHousing, maxPriceHousing) => {
   elem.addEventListener('input', () => {
-    let valueType = typeHousing.value;
-    let minPrice = minPricesHousing[valueType];
+    const valueType = typeHousing.value;
+    const minPrice = minPricesHousing[valueType];
     const maxPrice = maxPriceHousing;
     const currentValue = elem.value;
 
@@ -71,8 +70,8 @@ const validatePrice = (elem, typeHousing, minPricesHousing, maxPriceHousing) => 
  * @param  {object} numberRooms   field with the number of rooms
  */
 const validateSeats = (elem, numberRooms) => {
-  const currentValue = elem.value;
-  const valueRoom = numberRooms.value;
+  const currentValue = Number(elem.value);
+  const valueRoom = Number(numberRooms.value);
 
   if (currentValue === 0 && valueRoom !== 100) {
     setInvalidStyle(elem);

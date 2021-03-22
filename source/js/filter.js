@@ -1,3 +1,5 @@
+import {changeStateFormControls} from './util.js';
+
 const DEFAULT_FILTER_VALUE = 'any';
 
 const mapFilters = document.querySelector('.map__filters');
@@ -26,6 +28,26 @@ const nameFields = {
   'housing-guests':'guests',
 };
 
+/**
+ * Form filters state change function
+ * @param  {boolean} flag true - active, false - diasbled
+ */
+const changeStateFormFilters = (flag) => {
+  if (flag) {
+    mapFilters.classList.remove('map__filters--disabled');
+  } else {
+    mapFilters.classList.add('map__filters--disabled');
+  }
+};
+
+/**
+ * Function for changing the states of form filters and interactive elements
+ * @param  {boolean} flag true - active form, false - diasbled form
+ */
+const setStatusFormFilters = (flag) => {
+  changeStateFormFilters(flag);
+  changeStateFormControls(mapFilters, flag);
+};
 /**
  * Function to reset the form with filters
  */
@@ -124,4 +146,4 @@ const setHandlerFormFilter = (cb) => {
   })
 };
 
-export {mapFilters, resetFormFilters, setHandlerFormFilter, getFilteredAnnouncements};
+export {setStatusFormFilters, resetFormFilters, setHandlerFormFilter, getFilteredAnnouncements};

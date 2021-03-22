@@ -1,9 +1,9 @@
-const SIMILAR_ANNOUNCEMENTS_COUNT = 10;
-
-import {initForm, setHandlersForm} from './form.js';
+import {initializeForm, setHandlersForm} from './form.js';
 import {addMarkersOnMap, showFilteredAnnouncements} from './map.js';
 import {getDataAnnouncements} from './requests.js';
 import {showMessagePopup} from './popup.js';
+
+const SIMILAR_ANNOUNCEMENTS_COUNT = 10;
 
 /**
  * Wrapper function for receiving data from the server and displaying markers announcements
@@ -23,7 +23,7 @@ const getFilteredData = () => {
   });
 }
 
-initForm();
+initializeForm();
 
 getData();
 

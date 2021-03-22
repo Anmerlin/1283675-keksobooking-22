@@ -1,13 +1,14 @@
-const DEFAULT_IMAGE = 'img/muffin-grey.svg';
-const MIN_ANNOUNCEMENT_TITLE_LENGTH = 30;
-const MAX_ANNOUNCEMENT_TITLE_LENGTH = 100;
-const MAX_PRICE_HOUSING = 1000000;
-
+import {setStatusFormFilters, resetFormFilters} from './filter.js';
+import {changeStateFormControls} from './util.js';
 import {setDefaultPhoto, changePhotoHandler} from './photo.js';
 import {validateAnnouncementTitle, validatePrice, validateSeats} from './validation.js';
 import {sendDataFormAnnouncement} from './requests.js';
 import {resetDataMap} from './map.js';
-import {mapFilters, resetFormFilters} from './filter.js';
+
+const DEFAULT_IMAGE = 'img/muffin-grey.svg';
+const MIN_ANNOUNCEMENT_TITLE_LENGTH = 30;
+const MAX_ANNOUNCEMENT_TITLE_LENGTH = 100;
+const MAX_PRICE_HOUSING = 1000000;
 
 const minPriceHousePerNight = {
   bungalow: 0,
@@ -48,36 +49,18 @@ const numberSeats = document.querySelector('#capacity');
 const changeStateForm = (flag) => {
   if (flag) {
     adForm.classList.remove('ad-form--disabled');
-    mapFilters.classList.remove('map__filters--disabled');
   } else {
     adForm.classList.add('ad-form--disabled');
-    mapFilters.classList.add('map__filters--disabled');
   }
 };
 
 /**
- * Function for changing the state of interactive form elements
- * @param  {object} formName constants defining the form
- */
-const changeStateFormControls = (formName) => {
-  const formElements = formName.elements;
-  for (const element of formElements) {
-    if (element.hasAttribute('disabled')) {
-      element.removeAttribute('disabled');
-    } else {
-      element.setAttribute('disabled', 'disabled')
-    }
-  }
-};
-
-/**
- * Function for changing the states of forms and interactive elements
+ * Function for changing the states of form and interactive elements
  * @param  {boolean} flag true - active form, false - diasbled form
  */
 const setStatusForm = (flag) => {
   changeStateForm(flag);
-  changeStateFormControls(adForm);
-  changeStateFormControls(mapFilters);
+  changeStateFormControls(adForm, flag);
 };
 
 /**
@@ -95,24 +78,25 @@ const clearForms = (data) => {
 /**
  * Form initialization function
  */
-const initForm = () => {
+const initializeForm = () => {
   // Реализуйте с помощью JavaScript перевод страницы в неактивное состояние, все пункты, кроме первого про карту.
   setStatusForm(false);
+  setStatusFormFilters(false);
 
   // «Тип жилья» — выбор опции меняет атрибуты минимального значения и плейсхолдера поля «Цена за ночь»;
   typeHousing.addEventListener('change', (evt) => {
-    let val = evt.target.value;
+    const val = evt.target.value;
     pricePerNight.min = pricePerNight.placeholder = minPriceHousePerNight[val];
   });
 
   // «Время заезда», «Время выезда» — выбор опции одного поля автоматически изменят значение другого.
   timeCheckIn.addEventListener('change', (evt) => {
-    let val = evt.target.value;
+    const val = evt.target.value;
     timeCheckOut.value = val;
   });
 
   timeCheckOut.addEventListener('change', (evt) => {
-    let val = evt.target.value;
+    const val = evt.target.value;
     timeCheckIn.value = val;
   });
 
@@ -128,7 +112,7 @@ const initForm = () => {
       numberSeats.setCustomValidity('')
     }
 
-    for (let descendant of descendants) {
+    for (const descendant of descendants) {
       const val = Number(descendant.value);
 
       if (capacitySeat.includes(val)) {
@@ -174,4 +158,4 @@ const setHandlersForm = (popup, data) => {
   });
 };
 
-export {initForm, setStatusForm, setHandlersForm, clearForms};
+export {initializeForm, setStatusForm, setHandlersForm, clearForms};

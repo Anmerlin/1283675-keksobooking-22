@@ -1,15 +1,15 @@
-const LAT_COORD_DEFAULT = 35.68950;
-const LNG_COORD_DEFAULT = 139.69171;
-const NUMBER_DECIMAL_PLACES = 5;
-const NUMBER_ZOOM_MAP = 9;
-const RERENDER_DELAY = 500;
-
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {setStatusForm} from './form.js';
 import {createBalloonPopupOnMap} from './card.js';
 import {setHandlerFormFilter, getFilteredAnnouncements} from './filter.js';
-import {debounceHandler} from './util.js';
+import {debounceShowMarkers} from './util.js';
+
+const LAT_COORD_DEFAULT = 35.68950;
+const LNG_COORD_DEFAULT = 139.69171;
+const NUMBER_DECIMAL_PLACES = 5;
+const NUMBER_ZOOM_MAP = 9;
+const RERENDER_DELAY = 500;
 
 const addressFieldForm = document.querySelector('#address');
 const addressFieldFormValue = () => {
@@ -68,7 +68,7 @@ const layerPins = L.layerGroup();
  * Change of coordinates in the address field of the form
  */
 mainPinMarker.on('moveend', (evt) => {
-  let coords = evt.target.getLatLng();
+  const coords = evt.target.getLatLng();
   addressFieldForm.value = `${coords.lat.toFixed(NUMBER_DECIMAL_PLACES)}, ${coords.lng.toFixed(NUMBER_DECIMAL_PLACES)}`;
 });
 
@@ -115,7 +115,7 @@ const resetDataMap = (showPins) => {
 const showFilteredAnnouncements = (data, count) => {
   if (data && data.length) {
     setHandlerFormFilter(
-      debounceHandler(() => {
+      debounceShowMarkers(() => {
         addMarkersOnMap(getFilteredAnnouncements(data, count), true);
       }, RERENDER_DELAY),
     );
